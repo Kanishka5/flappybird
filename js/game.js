@@ -71,6 +71,7 @@
 
           this.game.physics.arcade.enableBody(this);
           this.body.allowGravity = false;
+          this.flapAudio = this.game.add.audio("flap");
         };
 
         Bird.prototype = Object.create(Phaser.Sprite.prototype);
@@ -84,6 +85,7 @@
         };
 
         Bird.prototype.flap = function() {
+          this.flapAudio.play();
           this.body.velocity.y = -400;
           this.game.add
             .tween(this)
@@ -225,13 +227,20 @@
         function GameOver() {}
 
         GameOver.prototype = {
+          init: function(customParam1) {
+            this.score = customParam1;
+          },
           preload: function() {},
           create: function() {
             var style = {
-              font: "65px Arial",
+              font: "40px Arial",
               fill: "#ffffff",
               align: "center"
             };
+
+            this.background = this.game.add.sprite(0, 0, "background");
+
+            this.ground = this.game.add.tileSprite(0, 400, 335, 112, "ground");
             this.titleText = this.game.add.text(
               this.game.world.centerX,
               100,
@@ -240,17 +249,17 @@
             );
             this.titleText.anchor.setTo(0.5, 0.5);
 
-            this.congratsText = this.game.add.text(
+            this.scoreText = this.game.add.text(
               this.game.world.centerX,
               200,
-              "You Win!",
-              { font: "32px Arial", fill: "#ffffff", align: "center" }
+              "Score - " + this.score,
+              { font: "20px Arial", fill: "#ffffff", align: "center" }
             );
-            this.congratsText.anchor.setTo(0.5, 0.5);
+            this.scoreText.anchor.setTo(0.5, 0.5);
 
             this.instructionText = this.game.add.text(
               this.game.world.centerX,
-              300,
+              250,
               "Click To Play Again",
               { font: "16px Arial", fill: "#ffffff", align: "center" }
             );
@@ -281,10 +290,10 @@
 
             this.titleGroup = this.game.add.group();
 
-            this.title = this.game.add.sprite(0, 0, "title");
+            this.title = this.game.add.sprite(0, 60, "title");
             this.titleGroup.add(this.title);
 
-            this.bird = this.game.add.sprite(200, 5, "bird");
+            this.bird = this.game.add.sprite(200, 55, "bird");
             this.titleGroup.add(this.bird);
 
             this.bird.animations.add("flap");
@@ -356,6 +365,9 @@
             this.flapKey = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.flapKey.onDown.addOnce(this.startGame, this);
             this.flapKey.onDown.add(this.bird.flap, this.bird);
+            // this.flapKey.onDown.add(() => {
+            //   this.flapAudio.play();
+            // });
 
             // add mouse/touch controls
             this.game.input.onDown.addOnce(this.startGame, this);
@@ -372,7 +384,7 @@
             this.instructionsGroup.setAll("anchor.y", 0.5);
 
             var style = {
-              font: "65px Arial",
+              font: "30px Arial",
               fill: "#ffffff",
               align: "center"
             };
@@ -383,6 +395,8 @@
               style
             );
             this.scoreText.visible = false;
+            this.scoreAudio = this.game.add.audio("score");
+            this.pipeHit = this.game.add.audio("pipe-hit");
           },
           update: function() {
             this.game.physics.arcade.collide(
@@ -416,7 +430,8 @@
             pipeGroup.reset(this.game.width, pipeY);
           },
           deathHandler: function() {
-            this.game.state.start("gameover");
+            this.pipeHit.play();
+            this.game.state.start("gameover", true, false, this.score);
           },
 
           shutdown: function() {
@@ -443,6 +458,7 @@
               pipeGroup.topPipe.world.x <= this.bird.world.x
             ) {
               pipeGroup.hasScored = true;
+              this.scoreAudio.play();
               this.score++;
               this.scoreText.setText(this.score.toString());
               this.scoreText.visible = true;
@@ -489,6 +505,10 @@
             this.load.image("title", "../assets/title.png");
             this.load.image("startButton", "../assets/start-button.png");
             this.load.image("instructions", "../assets/instructions.png");
+            this.load.audio("score", "../assets/score.wav");
+            this.load.audio("pipe-hit", "../assets/pipe-hit.wav");
+            this.load.audio("ground-hit", "../assets/ground-hit.wav");
+            this.load.audio("flap", "../assets/flap.wav");
             this.load.image("getReady", "../assets/get-ready.png");
             this.load.spritesheet("bird", "../assets/bird.png", 34, 24, 3);
             this.load.spritesheet("pipe", "../assets/pipes.png", 54, 320, 2);
