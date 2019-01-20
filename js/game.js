@@ -86,7 +86,7 @@
 
         Bird.prototype.flap = function() {
           this.flapAudio.play();
-          this.body.velocity.y = -400 * 2;
+          this.body.velocity.y = -400 * 2.2;
           this.game.add
             .tween(this)
             .to({ angle: -40 }, 200)
@@ -361,7 +361,7 @@
             this.score = 0;
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.game.physics.arcade.gravity.y = 2000;
+            this.game.physics.arcade.gravity.y = 2400;
             this.background = this.game.add.sprite(0, 0, "background");
 
             this.bird = new Bird(this.game, 100 * 3, this.game.height / 2);
