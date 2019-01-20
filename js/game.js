@@ -35,7 +35,7 @@
 
         //global variables
         window.onload = function() {
-          var game = new Phaser.Game(288, 505, Phaser.AUTO, "bee-runner");
+          var game = new Phaser.Game(864, 1515, Phaser.AUTO, "bee-runner");
 
           // Game States
           game.state.add("boot", require("./states/boot"));
@@ -86,10 +86,10 @@
 
         Bird.prototype.flap = function() {
           this.flapAudio.play();
-          this.body.velocity.y = -400;
+          this.body.velocity.y = -400 * 2;
           this.game.add
             .tween(this)
-            .to({ angle: -40 }, 100)
+            .to({ angle: -40 }, 200)
             .start();
         };
 
@@ -104,7 +104,7 @@
         var Ground = function(game, x, y, width, height) {
           Phaser.TileSprite.call(this, game, x, y, width, height, "ground");
           this.game.physics.arcade.enableBody(this);
-          this.autoScroll(-200, 0);
+          this.autoScroll(-600, 0);
           // initialize your prefab here
 
           //para o chão não ser afetado pela gravidade
@@ -160,11 +160,11 @@
           this.topPipe = new Pipe(this.game, 0, 0, 0);
           this.add(this.topPipe);
 
-          this.bottomPipe = new Pipe(this.game, 0, 440, 1);
+          this.bottomPipe = new Pipe(this.game, 0, 440 * 3, 1);
           this.add(this.bottomPipe);
 
           this.hasScored = false;
-          this.setAll("body.velocity.x", -200);
+          this.setAll("body.velocity.x", -200 * 3);
         };
 
         PipeGroup.prototype = Object.create(Phaser.Group.prototype);
@@ -176,12 +176,12 @@
 
         PipeGroup.prototype.reset = function(x, y) {
           this.topPipe.reset(0, 0);
-          this.bottomPipe.reset(0, 440);
+          this.bottomPipe.reset(0, 440 * 3);
 
           this.x = x;
           this.y = y;
 
-          this.setAll("body.velocity.x", -200);
+          this.setAll("body.velocity.x", -600);
           this.hasScored = false;
           this.exists = true;
         };
@@ -233,17 +233,23 @@
           preload: function() {},
           create: function() {
             var style = {
-              font: "40px Arial",
+              font: "80px Arial",
               fill: "#ffffff",
               align: "center"
             };
 
             this.background = this.game.add.sprite(0, 0, "background");
 
-            this.ground = this.game.add.tileSprite(0, 400, 335, 112, "ground");
+            this.ground = this.game.add.tileSprite(
+              0,
+              400 * 3,
+              335 * 3,
+              112 * 3,
+              "ground"
+            );
             this.titleText = this.game.add.text(
               this.game.world.centerX,
-              100,
+              100 * 3,
               "Game Over!",
               style
             );
@@ -251,17 +257,17 @@
 
             this.scoreText = this.game.add.text(
               this.game.world.centerX,
-              200,
+              200 * 3,
               "Score - " + this.score,
-              { font: "20px Arial", fill: "#ffffff", align: "center" }
+              { font: "65px Arial", fill: "#ffffff", align: "center" }
             );
             this.scoreText.anchor.setTo(0.5, 0.5);
 
             this.instructionText = this.game.add.text(
               this.game.world.centerX,
-              250,
+              250 * 3,
               "Click To Play Again",
-              { font: "16px Arial", fill: "#ffffff", align: "center" }
+              { font: "58px Arial", fill: "#ffffff", align: "center" }
             );
             this.instructionText.anchor.setTo(0.5, 0.5);
           },
@@ -285,28 +291,34 @@
           create: function() {
             this.background = this.game.add.sprite(0, 0, "background");
 
-            this.ground = this.game.add.tileSprite(0, 400, 335, 112, "ground");
-            this.ground.autoScroll(-200, 0);
+            this.ground = this.game.add.tileSprite(
+              0,
+              1200,
+              335 * 3,
+              112 * 3,
+              "ground"
+            );
+            this.ground.autoScroll(-600, 0);
 
             this.titleGroup = this.game.add.group();
 
-            this.title = this.game.add.sprite(0, 60, "title");
+            this.title = this.game.add.sprite(0, 60 * 3, "title");
             this.titleGroup.add(this.title);
 
-            this.bird = this.game.add.sprite(200, 55, "bird");
+            this.bird = this.game.add.sprite(170 * 3, 55 * 3, "bird");
             this.titleGroup.add(this.bird);
 
             this.bird.animations.add("flap");
             this.bird.animations.play("flap", 12, true);
 
-            this.titleGroup.x = 30;
-            this.titleGroup.y = 20;
+            this.titleGroup.x = 30 * 3;
+            this.titleGroup.y = 20 * 3;
 
             this.game.add
               .tween(this.titleGroup)
               .to(
-                { y: 15 },
-                350,
+                { y: 15 * 3 },
+                350 * 3,
                 Phaser.Easing.Linear.NONE,
                 true,
                 0,
@@ -316,11 +328,12 @@
             //this.game.add.tween(object).to(properties, duration, ease, autoStart, delay, repeat, yoyo);
             this.startButton = this.game.add.button(
               this.game.width / 2,
-              300,
+              300 * 3,
               "startButton",
               this.startClick,
               this
             );
+            this.startButton.scale.setTo(3, 3);
             this.startButton.anchor.setTo(0.5, 0.5);
           },
           update: function() {},
@@ -348,15 +361,15 @@
             this.score = 0;
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.game.physics.arcade.gravity.y = 1200;
+            this.game.physics.arcade.gravity.y = 2000;
             this.background = this.game.add.sprite(0, 0, "background");
 
-            this.bird = new Bird(this.game, 100, this.game.height / 2);
+            this.bird = new Bird(this.game, 100 * 3, this.game.height / 2);
             this.game.add.existing(this.bird);
 
             this.pipes = this.game.add.group();
 
-            this.ground = new Ground(this.game, 0, 400, 335, 112);
+            this.ground = new Ground(this.game, 0, 400 * 3, 335 * 3, 112 * 3);
             this.game.add.existing(this.ground);
 
             this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
@@ -375,10 +388,12 @@
 
             this.instructionsGroup = this.game.add.group();
             this.instructionsGroup.add(
-              this.game.add.sprite(this.game.width / 2, 100, "getReady")
+              this.game.add.sprite(this.game.width / 2, 100 * 3, "getReady")
             );
+            this.instructionsGroup.setAll("scale.x", 3);
+            this.instructionsGroup.setAll("scale.y", 3);
             this.instructionsGroup.add(
-              this.game.add.sprite(this.game.width / 2, 325, "instructions")
+              this.game.add.sprite(this.game.width / 2, 325 * 3, "instructions")
             );
             this.instructionsGroup.setAll("anchor.x", 0.5);
             this.instructionsGroup.setAll("anchor.y", 0.5);
@@ -419,7 +434,7 @@
           },
           generatePipes: function() {
             console.log("generatePipes");
-            var pipeY = this.game.rnd.integerInRange(-100, 100);
+            var pipeY = this.game.rnd.integerInRange(-300, 300);
             var pipeGroup = this.pipes.getFirstExists(false);
 
             if (!pipeGroup) {
@@ -510,8 +525,8 @@
             this.load.audio("ground-hit", "../assets/ground-hit.wav");
             this.load.audio("flap", "../assets/flap.wav");
             this.load.image("getReady", "../assets/get-ready.png");
-            this.load.spritesheet("bird", "../assets/bird.png", 27.3, 27, 3);
-            this.load.spritesheet("pipe", "../assets/pipes.png", 54, 320, 2);
+            this.load.spritesheet("bird", "../assets/bird.png", 80.3, 79, 3);
+            this.load.spritesheet("pipe", "../assets/pipes.png", 162, 960, 2);
           },
           create: function() {
             // window.alert("he;");
