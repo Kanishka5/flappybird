@@ -361,7 +361,7 @@
             this.score = 0;
 
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.game.physics.arcade.gravity.y = 2400;
+            this.game.physics.arcade.gravity.y = 2900;
             this.background = this.game.add.sprite(0, 0, "background");
 
             this.bird = new Bird(this.game, 100 * 3, this.game.height / 2);
