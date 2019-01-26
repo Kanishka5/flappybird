@@ -91,7 +91,7 @@
 
         Bird.prototype.flap = function() {
           this.flapAudio.play();
-          this.body.velocity.y = -400 * 2.7;
+          this.body.velocity.y = -400 * 2.4;
           this.game.add
             .tween(this)
             .to({ angle: -40 }, 200)
@@ -215,9 +215,9 @@
           create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-            this.scale.parentIsWindow = true;
+            // this.scale.parentIsWindow = true;
             this.scale.pageAlignHorizontally = true;
-            // this.scale.pageAlignVertically = true;
+            this.scale.pageAlignVertically = true;
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.game.state.start("preload");
           }
