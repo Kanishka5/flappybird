@@ -43,6 +43,11 @@
           game.state.add("menu", require("./states/menu"));
           game.state.add("play", require("./states/play"));
           game.state.add("preload", require("./states/preload"));
+
+          // game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+          // game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+          // game.scale.pageAlignHorizontally = true;
+          // game.scale.pageAlignVertically = true;
           // this.game.load.crossOrigin = "anonymous";
           game.state.start("boot");
         };
@@ -86,7 +91,7 @@
 
         Bird.prototype.flap = function() {
           this.flapAudio.play();
-          this.body.velocity.y = -400 * 2.2;
+          this.body.velocity.y = -400 * 3;
           this.game.add
             .tween(this)
             .to({ angle: -40 }, 200)
@@ -210,9 +215,11 @@
           create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.scale.parentIsWindow = true;
+
             this.scale.pageAlignHorizontally = true;
             this.scale.pageAlignVertically = true;
-            this.game.input.maxPointers = 1;
+            this.game.physics.startSystem(Phaser.Physics.ARCADE);
             this.game.state.start("preload");
           }
         };
@@ -399,7 +406,7 @@
             this.instructionsGroup.setAll("anchor.y", 0.5);
 
             var style = {
-              font: "30px Arial",
+              font: "70px Roboto",
               fill: "#ffffff",
               align: "center"
             };
@@ -421,6 +428,10 @@
               null,
               this
             );
+            console.log(this.bird.position);
+            if (this.bird.position.y < -55) {
+              this.deathHandler();
+            }
             this.pipes.forEach(function(pipeGroup) {
               this.checkScore(pipeGroup);
               this.game.physics.arcade.collide(
