@@ -91,7 +91,7 @@
 
         Bird.prototype.flap = function() {
           this.flapAudio.play();
-          this.body.velocity.y = -400 * 3;
+          this.body.velocity.y = -400 * 2.7;
           this.game.add
             .tween(this)
             .to({ angle: -40 }, 200)
