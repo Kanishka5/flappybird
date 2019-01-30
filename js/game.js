@@ -243,7 +243,7 @@
               fill: "#ffffff",
               align: "center"
             };
-
+            window.alert(window.email);
             this.background = this.game.add.sprite(0, 0, "background");
             if (window.email) {
               this.email = this.game.add.text(
