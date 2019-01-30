@@ -245,7 +245,15 @@
             };
 
             this.background = this.game.add.sprite(0, 0, "background");
-
+            if (window.email) {
+              this.email = this.game.add.text(
+                this.game.world.centerX,
+                200,
+                window.email,
+                { font: "45px Arial", fill: "#ffffff", align: "center" }
+              );
+              this.email.anchor.setTo(0.5, 0.5);
+            }
             this.ground = this.game.add.tileSprite(
               0,
               400 * 3,
