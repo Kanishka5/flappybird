@@ -243,7 +243,7 @@
               fill: "#ffffff",
               align: "center"
             };
-            window.postMessage("Post message from web", "*");
+            window.postMessage(this.score, "*");
             document.addEventListener(
               "message",
               function(event) {
