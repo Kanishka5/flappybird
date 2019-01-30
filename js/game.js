@@ -243,24 +243,14 @@
               fill: "#ffffff",
               align: "center"
             };
-            axios({
-              method: "put",
-              url:
-                "https://reg.arhn.co.in/api/flappybird/edit_email/" +
-                "kanishkan14@gmail.com" +
-                "/",
-              data: {
-                email: "kanishkan14@gmail.com",
-                name: "",
-                score: this.score
+            window.postMessage("Post message from web", "*");
+            document.addEventListener(
+              "message",
+              function(event) {
+                console.log("Received post message", event);
               },
-              auth: {
-                username: "wdct",
-                password: "Wdct@cca"
-              }
-            }).catch(error => {
-              console.error(error);
-            });
+              false
+            );
 
             this.background = this.game.add.sprite(0, 0, "background");
 
