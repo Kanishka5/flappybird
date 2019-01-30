@@ -435,7 +435,7 @@
               null,
               this
             );
-            console.log(this.bird.position);
+
             if (this.bird.position.y < -55) {
               this.deathHandler();
             }
@@ -451,12 +451,10 @@
             }, this);
           },
           generatePipes: function() {
-            console.log("generatePipes");
             var pipeY = this.game.rnd.integerInRange(-300, 300);
             var pipeGroup = this.pipes.getFirstExists(false);
 
             if (!pipeGroup) {
-              console.log("instanciou pipe");
               pipeGroup = new PipeGroup(this.game, this.pipes);
             }
 
